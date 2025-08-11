@@ -45,8 +45,8 @@ class WeatherApp:
         # Load CSS styles
         load_css()
         
-        st.markdown("# 🌦️ Advanced Weather Forecast & Predictor")
-        st.markdown("🌍 **Search for any city worldwide and get comprehensive weather information with AI-powered predictions**")
+        st.markdown("# Advanced Weather Forecast & Predictor")
+        st.markdown(" **Search for any city worldwide and get comprehensive weather information with AI-powered predictions**")
         
         # Test API key first
         if not Config.test_api_key():
@@ -55,8 +55,8 @@ class WeatherApp:
             st.info("**Get your free API key:** https://openweathermap.org/api")
             st.info("**Note:** New API keys can take up to 2 hours to activate")
             return
-        else:
-            st.success("✅ API connection successful")
+        # else:
+        #     st.success("✅ API connection successful")
         
         # Main city selection
         st.markdown("## 📍 Select Main Location")
@@ -71,7 +71,7 @@ class WeatherApp:
         if st.session_state.main_city_data:
             self.display_main_weather()
         else:
-            st.info("👆 Please search and select a city above to see weather information")
+            st.info(" Please search and select a city above to see weather information")
         
         # Comparison section
         st.markdown("---")

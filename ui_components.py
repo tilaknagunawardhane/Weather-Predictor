@@ -75,7 +75,7 @@ class WeatherUI:
                                     use_container_width=True
                                 ):
                                     selected_city = city
-                                    st.balloons()
+                                    # st.balloons()
                                     return selected_city
                     else:
                         st.info("Popular cities list is loading... Please try searching for a specific city.")
