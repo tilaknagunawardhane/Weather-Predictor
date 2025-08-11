@@ -6,6 +6,7 @@ import requests
 import time
 from datetime import datetime, timedelta
 from typing import List, Dict
+from streamlit_folium import folium_static
 
 # Import custom modules
 from config import Config
@@ -69,6 +70,9 @@ class WeatherApp:
         
         # Display main weather if city is selected
         if st.session_state.main_city_data:
+            # Display city location map at the top
+            self.display_city_location_map()
+            # Display weather information
             self.display_main_weather()
         else:
             st.info(" Please search and select a city above to see weather information")
@@ -113,6 +117,20 @@ class WeatherApp:
         # Footer
         st.markdown("---")
         st.markdown("**🌐 Data provided by OpenWeatherMap** | Built with ❤️ using Streamlit")
+    
+    def display_city_location_map(self):
+        """Display a map showing the selected city location at the top."""
+        city_data = st.session_state.main_city_data
+        
+        st.markdown('<div class="weather-card">', unsafe_allow_html=True)
+        st.subheader(f"📍 Location Map - {city_data['display_name']}")
+        
+        # Create and display the city location map
+        city_map = self.weather_map.create_city_location_map(city_data)
+        folium_static(city_map, width=800, height=400)
+        
+        st.markdown("**Map Features:** Zoom in/out, pan around, and explore the area around your selected city.")
+        st.markdown('</div>', unsafe_allow_html=True)
     
     def display_main_weather(self):
         """Display main city weather information."""
@@ -294,8 +312,8 @@ class WeatherApp:
                 # Display comparison charts
                 self.display_comparison_charts(all_weather_data)
                 
-                # Display interactive map
-                self.display_comparison_map(all_weather_data)
+                # Display interactive maps
+                self.display_comparison_maps(all_weather_data)
     
     def display_comparison_table(self, weather_data_list: List[Dict]):
         """Display comparison table."""
@@ -399,11 +417,38 @@ class WeatherApp:
         st.markdown('<div class="map-container">', unsafe_allow_html=True)
         st.subheader("🗺️ Interactive Weather Map")
         
-        # Create and display the map
-        map_fig = self.weather_map.create_world_map(weather_data_list)
-        st.plotly_chart(map_fig, use_container_width=True)
+        # Create and display the enhanced Folium map
+        world_map = self.weather_map.create_world_map(weather_data_list)
+        folium_static(world_map, width=800, height=600)
         
-        st.markdown("**Map Legend:** Marker size and color represent temperature. Hover over markers for details.")
+        st.markdown("**Map Features:** Multiple tile themes, zoom in/out, pan, fullscreen, minimap, and measurement tools.")
+        st.markdown("**Legend:** Marker colors represent temperature ranges (Blue: Cold, Yellow: Mild, Red: Hot)")
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    def display_comparison_maps(self, weather_data_list: List[Dict]):
+        """Display multiple types of comparison maps."""
+        st.markdown('<div class="weather-card">', unsafe_allow_html=True)
+        st.subheader("🗺️ Interactive Weather Maps")
+        
+        # Create tabs for different map types
+        map_tab1, map_tab2 = st.tabs(["🌡️ Temperature Map", "☁️ Weather Summary Map"])
+        
+        with map_tab1:
+            st.markdown("**Temperature-based weather map with interactive features:**")
+            # Create and display the enhanced Folium temperature map
+            world_map = self.weather_map.create_world_map(weather_data_list)
+            folium_static(world_map, width=800, height=600)
+            st.markdown("**Features:** Multiple tile themes, zoom in/out, pan, fullscreen, minimap, and measurement tools.")
+            st.markdown("**Legend:** Marker colors represent temperature ranges (Blue: Cold, Yellow: Mild, Red: Hot)")
+        
+        with map_tab2:
+            st.markdown("**Weather condition summary map:**")
+            # Create and display the weather summary map
+            summary_map = self.weather_map.create_weather_summary_map(weather_data_list)
+            folium_static(summary_map, width=800, height=500)
+            st.markdown("**Features:** Weather condition clustering, color-coded markers, and interactive popups.")
+            st.markdown("**Legend:** Different colors represent different weather conditions across cities.")
+        
         st.markdown('</div>', unsafe_allow_html=True)
 
 # Run the application
