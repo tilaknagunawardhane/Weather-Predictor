@@ -2,12 +2,13 @@ import requests
 import os
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
-API_KEY1 = os.getenv("WEATHER_API_KEY")
 
 class Config:
-    API_KEY = API_KEY1
-    CACHE_DURATION = 300 #5 mins
+    # Always fetch API key from environment
+    API_KEY = os.getenv("WEATHER_API_KEY")
+    CACHE_DURATION = 300 # 5 mins
     GEOCODING_CACHE_DURATION = 3600  # 1 hour for city suggestions
 
     @staticmethod
@@ -17,5 +18,5 @@ class Config:
             test_url = f"http://api.openweathermap.org/data/2.5/weather?q=London&appid={Config.API_KEY}&units=metric"
             response = requests.get(test_url, timeout=5)
             return response.status_code == 200
-        except:
+        except Exception:
             return False

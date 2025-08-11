@@ -48,7 +48,7 @@ class WeatherUI:
                                 use_container_width=True
                             ):
                                 selected_city = city
-                                st.balloons()  # Fun animation when city is selected
+                                # st.balloons()  # Fun animation when city is selected
                                 return selected_city  # Return immediately when clicked
                 else:
                     st.warning("🚫 No cities found. Try a different search term.")

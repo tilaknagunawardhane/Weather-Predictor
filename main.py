@@ -119,7 +119,7 @@ class WeatherApp:
         city_data = st.session_state.main_city_data
         
         # Debug information
-        st.write(f"🔍 **Debug:** Selected city data: {city_data}")
+        # st.write(f"🔍 **Debug:** Selected city data: {city_data}")
         
         try:
             # Fetch weather data
